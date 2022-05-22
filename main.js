@@ -1,80 +1,156 @@
-var mouseEvent = "empty";
-var last_position_of_x, last_position_of_y;
-var width = screen.width;
+canvas = document.getElementById('myCanvas');
+ctx = canvas.getContext("2d");
 
-    canvas = document.getElementById('myCanvas');
-    ctx = canvas.getContext("2d");
-    
-    color = "black";
-    width_of_line = 2;
+//Create an array "nasa_mars_images_array" and store all the image file names.
+nasa_mars_images_array = ["nasa_image_1.jpg","nasa_image_2.jpeg","nasa_image_3.jpg","nasa_image_4.jpg"];
 
-    //Define "new_width" and "new_height" variables to store new screen width and height.
-var new_width=screen.width - 90;
-var new_height=screen.height -700;
+//Generate random number and store it in variable "random_number"
+random_number = Math.floor(Math.random() * 4);
 
-    /*If the screen size is less than 992 (means 992px), then change the width and height of 
-    the canvas with the new width and new height */
-if(width <992){
-    document.getElementById("myCanvas").width=new_width;
-    document.getElementById("myCanvas").height=new_height;
-    document.body.style.overflow="hidden";
+console.log(random_number);
+rover_width = 100;
+rover_height = 90;
+
+/*Pass this random_number as the index to the array and update the background_image variable 
+with the following*/
+background_image = nasa_mars_images_array[random_number];
+
+//console this background_image variable to see when images come, everytime we refresh the page.
+console.log("background_image = + background_image");
+
+
+rover_image = "rover.png";
+
+rover_x = 10;
+rover_y = 10;
+
+function add() {
+	background_imgTag = new Image(); //defining a variable with a new image
+	background_imgTag.onload = uploadBackground; // setting a function, onloading this variable
+	background_imgTag.src = background_image;   // load image
+
+	rover_imgTag = new Image(); //defining a variable with a new image
+	rover_imgTag.onload = uploadrover; // setting a function, onloading this variable
+	rover_imgTag.src = rover_image;   // load image
 }
 
-    //Change 'mousedown' event to 'touchstart'
-    canvas.addEventListener("touchstart", my_touchstart);  
-    //Change the function to 'my_touchstart'  
-    function my_touchstart(e)
-    {
-        //Log my_toustart in console.
-        console.log("my_touchstart");
+function uploadBackground() {
+	ctx.drawImage(background_imgTag, 0, 0, canvas.width, canvas.height);
+}
+
+function uploadrover() {
+	ctx.drawImage(rover_imgTag, rover_x, rover_y, rover_width, rover_height);
+}
 
 
-        //Addictonal Activity start
-       
-       
-        //Addictonal Activity ends
+window.addEventListener("keydown", my_keydown);
 
-        //Update the last_position_of_x_touch and last_position_of_y_touch here.
-        last_position_of_x=e.touches[0].clientX -canvas.offsetLeft;
-        last_position_of_y=e.touches[0].clientY -canvas.offsetTop;
+function my_keydown(e)
+{
+	keyPressed = e.keyCode;
+	console.log(keyPressed);
+		if(keyPressed == '38')
+		{
+			up();
+			console.log("up");
+		}
+		if(keyPressed == '40')
+		{
+			down();
+			console.log("down");
+		}
+		if(keyPressed == '37')
+		{
+			left();
+			console.log("left");
+		}
+		if(keyPressed == '39')
+		{
+			right();
+			console.log("right");
+		}
+}
 
-       
+//Add the code for up() function:
+function up()
+{
+	 if(rover_y >=0)
+	 {
+		 rover_y = rover_y -10;
+		 console.log("when up arrow is pressed, x = " + rover_x + " | y = " +rover_y);
+		 uploadBackground();
+		 uploadrover();
+	 }
+}
 
 
 
-    }
 
-    //Replace the 'mousemove' event with 'touchmove'.
-    canvas.addEventListener("touchmove", my_touchmove);
-    //Replace the "my_mousemove()" function with "my_touchmove()" function.
-    function my_touchmove(e)
-    {
-        //Log the "my_touchMove" in the console.
-        console.log("my_touchMove");
 
-        /*Update the "current_position_of_touch_x" and "current_position_of_touch_y" 
-        with the touched points on canvas.*/
-        current_position_of_touch_x = e.touches[0].clientX-canvas.offsetLeft;
-        current_position_of_touch_y = e.touches[0].clientY-canvas.offsetTop;
 
-        ctx.beginPath();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = width_of_line;
-    
-        console.log("Last position of x and y coordinates = ");
-        console.log("x = " + last_position_of_x + "y = " + last_position_of_y);
-        ctx.moveTo(last_position_of_x, last_position_of_y);
-    
-        console.log("Current position of x and y coordinates = ");
-        console.log("x  = " + current_position_of_touch_x + "y = " + current_position_of_touch_y);
-        ctx.lineTo(current_position_of_touch_x, current_position_of_touch_y);
-        ctx.stroke();
-    
-        last_position_of_x = current_position_of_touch_x; 
-        last_position_of_y = current_position_of_touch_y;
-    }
 
-    //Additional activity to clear area.
+//Add the code for down() function:
+function down()
+{
+	 if(rover_y <=500)
+	 {
+		 rover_y = rover_y +10;
+		 console.log("when down arrow is pressed, x = " + rover_x + " | y = " +rover_y);
+		 uploadBackground();
+		 uploadrover();
+	 }
+}
 
-    
 
+
+
+
+
+
+
+
+
+
+//Add the code for right() function:
+function right()
+{
+	if(rover_x <=700)
+	{
+		rover_x =rover_x + 10;
+        console.log("when right arrow is pressed,  x = " + rover_x + " | y = " +rover_y);
+        uploadBackground();
+        uploadrover();
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//Additional Activity
+//Add the code for left() function:
+function left()
+{
+	if(rover_x >= 0)
+	{
+		rover_x =rover_x - 10;
+        console.log("when left arrow is pressed,  x = " + rover_x + " | y = " +rover_y);
+        uploadBackground();
+        uploadrover();
+	}
+}
+
+
+
+
+
+
+
+	
